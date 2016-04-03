@@ -15,7 +15,7 @@ import Foundation
 public protocol MockCallHandler {
     func expect(file: String, _ line: UInt) -> MockExpectation
     func reject() -> MockExpectation
-    func stub() -> MockExpectation
+    func stub(file: String, _ line: UInt) -> MockExpectation
     
     func verify(file: String, _ line: UInt)
     

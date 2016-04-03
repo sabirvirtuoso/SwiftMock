@@ -60,8 +60,8 @@ public class MockCallHandlerImpl: MockCallHandler {
         return (nil as MockExpectation?)!
     }
     
-    public func stub() -> MockExpectation {
-        return (nil as MockExpectation?)!
+    public func stub(file: String, _ line: UInt) -> MockExpectation {
+        return expect(file, line)
     }
     
     public func verify(file: String, _ line: UInt) {

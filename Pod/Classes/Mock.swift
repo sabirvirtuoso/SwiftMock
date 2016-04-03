@@ -28,8 +28,8 @@ public extension Mock {
         return callHandler.expect(file, line)
     }
     
-    func stub() -> MockExpectation {
-        return callHandler.stub()
+    func stub(file: String = #file, _ line: UInt = #line) -> MockExpectation {
+        return callHandler.stub(file, line)
     }
 
     func reject() -> MockExpectation {
