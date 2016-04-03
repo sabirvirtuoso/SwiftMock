@@ -87,9 +87,11 @@ public class MockCallHandlerImpl: MockCallHandler {
         if !expectationRegistered {
             // OK, this wasn't a call to set up function expectations, so it's a real call
             var matchedExpectationIndex: Int?
-            for var index=0; index<expectations.count && matchedExpectationIndex == nil; index++ {
-                if expectations[index].satisfy(functionName:functionName, args: args) {
-                    matchedExpectationIndex = index
+            for index in (0..<expectations.count) {
+                if matchedExpectationIndex == nil {
+                    if expectations[index].satisfy(functionName:functionName, args: args) {
+                      matchedExpectationIndex = index
+                    }
                 }
             }
 

@@ -25,8 +25,10 @@ public class MockMatcher {
             result = false
         }
         
-        for var index=0; index<firstArray.count && result; index++ {
-            result = match(firstArray[index], secondArray[index])
+        for index in (0..<firstArray.count) {
+            if result {
+                result = match(firstArray[index], secondArray[index])
+            }
         }
         
         return result
@@ -38,10 +40,12 @@ public class MockMatcher {
             result = false
         }
         
-        for var index=0; index<firstArray.count && result; index++ {
-            result = match(firstArray[index], secondArray[index])
+        for index in (0..<firstArray.count) {
+            if result {
+                result = match(firstArray[index], secondArray[index])
+            }
         }
-        
+
         return result
     }
     
@@ -61,10 +65,13 @@ public class MockMatcher {
             result=false
         }
         
-        for var index=0; index<firstKeys.count && result; index++ {
-            let key=firstKeys[index] as! NSCopying;
-            result = match(firstDictionary[key], secondDictionary[key])
+        for index in (0..<firstKeys.count) {
+            if result {
+                let key=firstKeys[index] as! NSCopying;
+                result = match(firstDictionary[key], secondDictionary[key])
+            }
         }
+
         return result
     }
     
