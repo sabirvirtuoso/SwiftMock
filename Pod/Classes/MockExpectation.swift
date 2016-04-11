@@ -11,7 +11,8 @@ import Foundation
 public class MockExpectation {
     /// calls will be matched against this functionName and arguments array
     public var functionName: String?
-    var args = [Any?]()
+    var expectedArgs = [Any?]()
+    var actualArgs = [Any?]()
     var argumentMatcherRequirement =  [Bool]()
 
     /// the actionable object holds actions for this expectation, and can perform them
@@ -26,7 +27,7 @@ public class MockExpectation {
           argumentMatcherRequirement = withArgumentMatcherRequirement!
         }
 
-        let theActionable = MockActionable(value)
+        let theActionable = MockActionable(ofExpectation: self, withReturnValue: value)
         actionPerformer = theActionable
         return theActionable
     }
@@ -37,7 +38,7 @@ public class MockExpectation {
         let result = functionName == nil
         if result {
             functionName = theFunctionName
-            args = theArgs
+            expectedArgs = theArgs
 
             for index in (0..<theArgs.count) {
               argumentMatcherRequirement[index] = true
@@ -53,17 +54,19 @@ public class MockExpectation {
     /// offer this function, and its arguments, to the expectation to see if it matches
     public func satisfy(functionName theFunctionName: String, args theArgs: Any?...) -> Bool {
         let matcher = MockMatcher()
-        var expectedArgs = [Any?]()
-        var actualArgs = [Any?]()
+        var expectedArgsToMatch = [Any?]()
+        var actualArgsToMatch = [Any?]()
+
+        actualArgs = theArgs
 
         for (index, matchArg) in argumentMatcherRequirement.enumerate() {
           if matchArg {
-            expectedArgs.append(args[index])
-            actualArgs.append(theArgs[index])
+            expectedArgsToMatch.append(expectedArgs[index])
+            actualArgsToMatch.append(actualArgs[index])
           }
         }
 
-        return functionName == theFunctionName && matcher.match(expectedArgs, actualArgs)
+        return functionName == theFunctionName && matcher.match(expectedArgsToMatch, actualArgsToMatch)
     }
     
     /// perform actions, and return a value from the mock

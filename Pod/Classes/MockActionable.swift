@@ -15,11 +15,15 @@ This class can make and perform actions associated with an expectation
 public class MockActionable<T>: MockActionPerformer {
     /// this is the list of MockAction to perform
     var actions = [MockAction<T>]()
-    
+
+    /// this is the expectation to which this MockActionPeformer belongs
+    weak var expectation: MockExpectation!
+
     /// this is the dummy return value, used to keep the compiler happy
     let dummyReturnValue: T
-    
-    init(_ value: T) {
+
+    init(ofExpectation expectation: MockExpectation, withReturnValue value: T) {
+        self.expectation = expectation
         dummyReturnValue = value
     }
 
@@ -35,9 +39,12 @@ public class MockActionable<T>: MockActionPerformer {
         return self
     }
     
-    public func andDo(closure: () -> Void) -> MockActionable<T> {
-        let action = MockAction({ () -> T in
-            closure()
+    public func andDo(closure: (args: Any?...) -> Void) -> MockActionable<T> {
+        let action = MockAction({
+            [unowned self] () -> T in
+
+            closure(args: self.expectation.actualArgs)
+
             return self.dummyReturnValue
         })
         addAction(action)
