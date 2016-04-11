@@ -57,7 +57,7 @@ public class MockCallHandlerImpl: MockCallHandler {
     }
     
     public func reject() -> MockExpectation {
-        return (nil as MockExpectation?)!
+        return MockRejection(failer: failer)
     }
     
     public func stub(file: String, _ line: UInt) -> MockExpectation {
