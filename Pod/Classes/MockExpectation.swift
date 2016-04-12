@@ -27,6 +27,10 @@ public class MockExpectation {
           argumentMatcherRequirement = withArgumentMatcherRequirement!
         }
 
+        if argumentMatcherRequirement.count > 0 && argumentMatcherRequirement.count != expectedArgs.count {
+          fatalError("There is a mismatch between number of expected arguments and its corresponding matcher requirement")
+        }
+
         let theActionable = MockActionable(ofExpectation: self, withReturnValue: value)
         actionPerformer = theActionable
         return theActionable
@@ -39,11 +43,8 @@ public class MockExpectation {
         if result {
             functionName = theFunctionName
             expectedArgs = theArgs
-
-            for index in (0..<theArgs.count) {
-              argumentMatcherRequirement[index] = true
-            }
         }
+
         return result
     }
     
@@ -58,6 +59,10 @@ public class MockExpectation {
         var actualArgsToMatch = [Any?]()
 
         actualArgs = theArgs
+
+        guard !argumentMatcherRequirement.isEmpty else {
+          return functionName == theFunctionName && matcher.match(expectedArgs, actualArgs)
+        }
 
         for (index, matchArg) in argumentMatcherRequirement.enumerate() {
           if matchArg {
