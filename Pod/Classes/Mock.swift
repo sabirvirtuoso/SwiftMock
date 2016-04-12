@@ -14,8 +14,8 @@ public protocol Mock {
     var callHandler: MockCallHandler { get }
     
     func expect(file: String, _ line: UInt) -> MockExpectation
-    func stub() -> MockExpectation
-    func reject() -> MockExpectation
+    func stub(file: String, _ line: UInt) -> MockExpectation
+    func reject(file: String, _ line: UInt) -> MockExpectation
     
     func verify(file: String, _ line: UInt)
     
@@ -32,8 +32,8 @@ public extension Mock {
         return callHandler.stub(file, line)
     }
 
-    func reject() -> MockExpectation {
-        return callHandler.reject()
+    func reject(file: String = #file, _ line: UInt = #line) -> MockExpectation {
+        return callHandler.reject(file, line)
     }
 
     func verify(file: String = #file, _ line: UInt = #line) {

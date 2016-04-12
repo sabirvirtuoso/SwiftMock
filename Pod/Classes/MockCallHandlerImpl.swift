@@ -56,7 +56,7 @@ public class MockCallHandlerImpl: MockCallHandler {
         return expectationsComplete
     }
     
-    public func reject() -> MockExpectation {
+    public func reject(file: String, _ line: UInt) -> MockExpectation {
         return MockRejection(failer: failer)
     }
     

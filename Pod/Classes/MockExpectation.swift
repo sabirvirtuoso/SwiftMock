@@ -78,13 +78,17 @@ public class MockExpectation {
 public class MockRejection: MockExpectation {
 
   let failer: MockFailer
+  let file: String
+  let line: UInt
 
-  public init(failer: MockFailer) {
+  public init(failer: MockFailer, file: String, _ line: UInt) {
     self.failer = failer
+    self.file = file
+    self.line = line
   }
 
   override public func satisfy(functionName theFunctionName: String, args theArgs: Any?...) -> Bool {
-    failer.doFail("Unexpected call to '\(theFunctionName)' received", file: "", line: 0)
+    failer.doFail("Unexpected call to '\(theFunctionName)' received", file: file, line: line)
     
     return true
   }
