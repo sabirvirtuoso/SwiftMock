@@ -39,7 +39,7 @@ public class MockActionable<T>: MockActionPerformer {
         return self
     }
     
-    public func andDo(closure: (args: Any?...) -> Void) -> MockActionable<T> {
+    public func andDo(closure: (args: [Any?]?) -> Void) -> MockActionable<T> {
         let action = MockAction({
             [unowned self] () -> T in
 

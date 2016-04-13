@@ -37,12 +37,12 @@ public class MockExpectation {
     }
     
     /// record the function name and arguments during the expectation-setting phase
-    public func acceptExpected(functionName theFunctionName: String, args theArgs: Any?...) -> Bool {
+    public func acceptExpected(functionName theFunctionName: String, args theArgs: [Any?]?) -> Bool {
         // do we already have a function? if so, we can't accept this call as an expectation
         let result = functionName == nil
         if result {
             functionName = theFunctionName
-            expectedArgs = theArgs
+            expectedArgs = theArgs ?? []
         }
 
         return result
@@ -53,12 +53,12 @@ public class MockExpectation {
     }
     
     /// offer this function, and its arguments, to the expectation to see if it matches
-    public func satisfy(functionName theFunctionName: String, args theArgs: Any?...) -> Bool {
+    public func satisfy(functionName theFunctionName: String, args theArgs: [Any?]?) -> Bool {
         let matcher = MockMatcher()
         var expectedArgsToMatch = [Any?]()
         var actualArgsToMatch = [Any?]()
 
-        actualArgs = theArgs
+        actualArgs = theArgs ?? []
 
         guard !argumentMatcherRequirement.isEmpty else {
           return functionName == theFunctionName && matcher.match(expectedArgs, actualArgs)
@@ -92,7 +92,7 @@ public class MockRejection: MockExpectation {
     self.line = line
   }
 
-  override public func satisfy(functionName theFunctionName: String, args theArgs: Any?...) -> Bool {
+  override public func satisfy(functionName theFunctionName: String, args theArgs: [Any?]?) -> Bool {
     failer.doFail("Unexpected call to '\(theFunctionName)' received", file: file, line: line)
     
     return true
