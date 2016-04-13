@@ -48,7 +48,7 @@ public class MockCallHandlerImpl: MockCallHandler {
     func expectationsComplete(file: String, _ line: UInt) -> Bool {
         var expectationsComplete = true
 
-        guard expectation != nil && !isRejection() else {
+        guard expectation != nil && !isRejection(expectation!) else {
           return expectationsComplete
         }
 
@@ -61,7 +61,7 @@ public class MockCallHandlerImpl: MockCallHandler {
         return expectationsComplete
     }
 
-    private func isRejection() -> Bool {
+    private func isRejection(expectation: MockExpectation) -> Bool {
         return expectation is MockRejection
     }
     
@@ -78,8 +78,12 @@ public class MockCallHandlerImpl: MockCallHandler {
     }
     
     public func verify(file: String, _ line: UInt) {
-        if expectationsComplete(file, line) && expectations.count > 0 {
-            let functionName = expectations[0].functionName!
+        let filteredExpectations = expectations.filter({
+            !isRejection($0)
+        })
+
+        if expectationsComplete(file, line) && filteredExpectations.count > 0 {
+            let functionName = filteredExpectations[0].functionName!
             failer.doFail("Expected call to '\(functionName)' not received", file: file, line: line)
         }
     }

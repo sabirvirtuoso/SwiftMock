@@ -23,5 +23,6 @@ class MockFailerImpl: MockFailer {
     func doFail(message: String, file: String, line: UInt) {
         // warning: not tested
         testCase.recordFailureWithDescription(message, inFile: file, atLine: line, expected: false)
+        XCTFail(message)
     }
 }
