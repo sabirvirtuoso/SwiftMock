@@ -27,13 +27,17 @@ public class MockExpectation {
           argumentMatcherRequirement = withArgumentMatcherRequirement!
         }
 
-        if argumentMatcherRequirement.count > 0 && argumentMatcherRequirement.count != expectedArgs.count {
-          fatalError("There is a mismatch between number of expected arguments and its corresponding matcher requirement")
-        }
+        assertArgumentCountMatch()
 
         let theActionable = MockActionable(ofExpectation: self, withReturnValue: value)
         actionPerformer = theActionable
         return theActionable
+    }
+  
+    private func assertArgumentCountMatch() {
+        if argumentMatcherRequirement.count > 0 && argumentMatcherRequirement.count != expectedArgs.count {
+          fatalError("There is a mismatch between number of expected arguments and its corresponding matcher requirement")
+        }
     }
     
     /// record the function name and arguments during the expectation-setting phase
@@ -97,4 +101,9 @@ public class MockRejection: MockExpectation {
     
     return true
   }
+  
+  private override func assertArgumentCountMatch() {
+    // do nothing
+  }
+
 }

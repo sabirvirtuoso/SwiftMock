@@ -30,34 +30,47 @@ public class MockCallHandlerImpl: MockCallHandler {
     public func expect(file: String, _ line: UInt) -> MockExpectation {
         let newExpectation = MockExpectation()
         
-        if expectationsComplete(file, line) {
-            // make new expectation, and store it
-            expectation = newExpectation
-            
-            // and add to the array
-            expectations.append(newExpectation)
-        }
+        addExpectation(newExpectation, file: file, line)
         
         // this return value will never be nil, but it might be useless. But returning a useless object is better than forcing tests to constantly unwrap. The test should fail anyway.
         return newExpectation
     }
-    
+
+    private func addExpectation(expectation: MockExpectation, file: String, _ line: UInt) {
+        if expectationsComplete(file, line) {
+          // make new expectation, and store it
+          self.expectation = expectation
+          // and add to the array
+          expectations.append(expectation)
+        }
+    }
+
     func expectationsComplete(file: String, _ line: UInt) -> Bool {
         var expectationsComplete = true
-        
+
+        guard expectation != nil && !isRejection() else {
+          return expectationsComplete
+        }
+
         // check that any previous expectation is complete, before starting the next
-        if let currentExpectation = expectation {
-            if !currentExpectation.isComplete() {
-                failer.doFail("Previous expectation was started but not completed", file: file, line: line)
-                expectationsComplete = false
-            }
+        if !expectation!.isComplete() {
+              failer.doFail("Previous expectation was started but not completed", file: file, line: line)
+              expectationsComplete = false
         }
 
         return expectationsComplete
     }
+
+    private func isRejection() -> Bool {
+        return expectation is MockRejection
+    }
     
     public func reject(file: String, _ line: UInt) -> MockExpectation {
-        return MockRejection(failer: failer, file: file, line)
+        let newExpectation = MockRejection(failer: failer, file: file, line)
+
+        addExpectation(newExpectation, file: file, line)
+
+        return newExpectation
     }
     
     public func stub(file: String, _ line: UInt) -> MockExpectation {
@@ -87,12 +100,13 @@ public class MockCallHandlerImpl: MockCallHandler {
         if !expectationRegistered {
             // OK, this wasn't a call to set up function expectations, so it's a real call
             var matchedExpectationIndex: Int?
+
             for index in (0..<expectations.count) {
-                if matchedExpectationIndex == nil {
                     if expectations[index].satisfy(functionName:functionName, args: args) {
                       matchedExpectationIndex = index
+
+                      break
                     }
-                }
             }
 
             if let index = matchedExpectationIndex {
@@ -113,7 +127,11 @@ public class MockCallHandlerImpl: MockCallHandler {
         
         // ... and remove it
         expectations.removeAtIndex(index)
-        
+
+        if expectation is MockRejection {
+          return nil
+        }
+
         // perform any actions on that expectation
         return expectation.performActions()
     }
