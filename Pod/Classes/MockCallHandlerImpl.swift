@@ -78,13 +78,18 @@ public class MockCallHandlerImpl: MockCallHandler {
     }
     
     public func verify(file: String, _ line: UInt) {
-        let filteredExpectations = expectations.filter({
-            !isRejection($0)
-        })
+        if expectationsComplete(file, line) && expectations.count > 0 {
+            for expectation in expectations {
+              let functionName = expectation.functionName!
 
-        if expectationsComplete(file, line) && filteredExpectations.count > 0 {
-            let functionName = filteredExpectations[0].functionName!
-            failer.doFail("Expected call to '\(functionName)' not received", file: file, line: line)
+              if isRejection(expectation) && (expectation as! MockRejection).rejectCalled {
+                failer.doFail("Unexpected call to '\(functionName)' received", file: file, line: line)
+
+                continue
+              }
+
+              failer.doFail("Expected call to '\(functionName)' not received", file: file, line: line)
+            }
         }
     }
     
