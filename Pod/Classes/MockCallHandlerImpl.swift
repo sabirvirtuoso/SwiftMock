@@ -82,13 +82,15 @@ public class MockCallHandlerImpl: MockCallHandler {
             for expectation in expectations {
               let functionName = expectation.functionName!
 
-              if isRejection(expectation) && (expectation as! MockRejection).rejectCalled {
-                failer.doFail("Unexpected call to '\(functionName)' received", file: file, line: line)
+              guard isRejection(expectation) else {
+                failer.doFail("Expected call to '\(functionName)' not received", file: file, line: line)
 
                 continue
               }
 
-              failer.doFail("Expected call to '\(functionName)' not received", file: file, line: line)
+              if (expectation as! MockRejection).rejectCalled {
+                failer.doFail("Unexpected call to '\(functionName)' received", file: file, line: line)
+              }
             }
         }
     }
@@ -133,13 +135,14 @@ public class MockCallHandlerImpl: MockCallHandler {
     func expectationMatched(index: Int) -> Any? {
         // get the expectation
         let expectation = expectations[index]
-        
-        // ... and remove it
-        expectations.removeAtIndex(index)
 
         if expectation is MockRejection {
           return nil
         }
+
+        // ... if not rejection then remove it
+        expectations.removeAtIndex(index)
+
 
         // perform any actions on that expectation
         return expectation.performActions()
