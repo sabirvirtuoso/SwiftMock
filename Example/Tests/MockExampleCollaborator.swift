@@ -21,14 +21,14 @@ class MockExampleCollaborator: ExampleCollaborator, Mock {
     }
     
     override func voidFunction() {
-        callHandler.accept(nil, functionName: __FUNCTION__, args: nil)
+      callHandler.accept(nil, functionName: #function, args: nil)
     }
     
     override func function(int: Int, _ string: String) -> String {
-        return callHandler.accept("", functionName: __FUNCTION__, args: int, string) as! String
+      return callHandler.accept("", functionName: #function, args: int, string) as! String
     }
 	
 	override func stringDictFunction(dict: Dictionary<String, String>) -> String {
-		return callHandler.accept("", functionName: __FUNCTION__, args: dict) as! String
+    return callHandler.accept("", functionName: #function, args: dict) as! String
 	}
 }

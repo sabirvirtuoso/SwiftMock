@@ -43,12 +43,12 @@ class TestMockCallHandler: MockCallHandler {
         return mockExpectation
     }
     
-    func stub() -> MockExpectation {
+    func stub(file: String, _ line: UInt) -> MockExpectation {
         stubCalled = true
         return mockExpectation
     }
     
-    func reject() -> MockExpectation {
+    func reject(file: String, _ line: UInt) -> MockExpectation {
         rejectCalled = true
         return mockExpectation
     }
@@ -110,7 +110,7 @@ class MockTests: XCTestCase {
         XCTAssertFalse(handler.stubCalled)
         
         // when
-        let result = sut.stub()
+        let result = sut.stub("theFile", 42)
         
         // when
         XCTAssertTrue(result === mockExpectation)
@@ -126,7 +126,7 @@ class MockTests: XCTestCase {
         XCTAssertFalse(handler.rejectCalled)
         
         // when
-        let result = sut.reject()
+        let result = sut.reject("theFile", 42)
         
         // when
         XCTAssertTrue(result === mockExpectation)

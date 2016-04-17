@@ -18,7 +18,7 @@ class ExampleCollaborator {
         return ""
     }
 	
-	func stringDictFunction(dict : [String: String]) -> String{
-		return ""
-	}
+    func stringDictFunction(dict : [String: String]) -> String{
+        return ""
+    }
 }

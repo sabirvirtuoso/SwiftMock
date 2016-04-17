@@ -26,8 +26,8 @@ class Example {
         return collaborator.function(int, string)
     }
 	
-	func doSomethingWithDictParameters(dict: Dictionary<String, String>) -> String {
-		return collaborator.stringDictFunction(dict)
-	}
+    func doSomethingWithDictParameters(dict: Dictionary<String, String>) -> String {
+        return collaborator.stringDictFunction(dict)
+    }
 }
 

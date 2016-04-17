@@ -76,7 +76,7 @@ class ExampleTests: XCTestCase {
         // given
         
         // expect
-        mockCollaborator.expect().call(mockCollaborator.voidFunction()).andDo { () in
+        mockCollaborator.expect().call(mockCollaborator.voidFunction()).andDo { (args: [Any?]?) in
             // if the call is received, this closure will be executed
             print("===== andDo closure called =====")
         }

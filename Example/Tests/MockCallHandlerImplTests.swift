@@ -270,9 +270,9 @@ class MockCallHandlerImplTests: XCTestCase {
         
         // when
         // Note: this "0" is here to provide the return value type
-        sut.expect("ignored", 1).call().andDo({
+        sut.expect("ignored", 1).call(0).andDo({ (args: [Any?]?) in
             closure1Called = true
-        }).andDo({
+        }).andDo({ (args: [Any?]?) in
             closure2Called = true
         })
         sut.accept(nil, functionName: "selector", args: nil)
