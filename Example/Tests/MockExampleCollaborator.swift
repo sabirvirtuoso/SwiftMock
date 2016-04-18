@@ -28,7 +28,19 @@ class MockExampleCollaborator: ExampleCollaborator, Mock {
       return callHandler.accept("", functionName: #function, args: int, string) as! String
     }
 	
-	override func stringDictFunction(dict: Dictionary<String, String>) -> String {
-    return callHandler.accept("", functionName: #function, args: dict) as! String
-	}
+    override func stringDictFunction(dict: Dictionary<String, String>) -> String {
+      return callHandler.accept("", functionName: #function, args: dict) as! String
+    }
+
+    override func methodOne() {
+      callHandler.accept(nil, functionName: #function, args: nil)
+    }
+
+    override func methodTwo() {
+      callHandler.accept(nil, functionName: #function, args: nil)
+    }
+
+    override func methodThree() {
+      callHandler.accept(nil, functionName: #function, args: nil)
+    }
 }

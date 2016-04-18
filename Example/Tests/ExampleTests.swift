@@ -60,17 +60,17 @@ class ExampleTests: XCTestCase {
         XCTAssertEqual(result, "hoopy")
     }
 	
-	func testStringDict(){
-		// expect
-		mockCollaborator.expect().call(mockCollaborator.stringDictFunction(["Hello":"Pong"])).andReturn("ping")
+    func testStringDict(){
+      // expect
+      mockCollaborator.expect().call(mockCollaborator.stringDictFunction(["Hello":"Pong"])).andReturn("ping")
 		
-		// when
-		let result = sut.doSomethingWithDictParameters(["Hello":"Pong"])
+      // when
+      let result = sut.doSomethingWithDictParameters(["Hello":"Pong"])
 		
-		// then
-		mockCollaborator.verify()
-		XCTAssertEqual(result, "ping")
-	}
+      // then
+      mockCollaborator.verify()
+      XCTAssertEqual(result, "ping")
+    }
     
     func testWithAndDoClosure() {
         // given
@@ -85,5 +85,109 @@ class ExampleTests: XCTestCase {
         sut.doSomething()
         
         // then...
+    }
+
+    func testExpectRejectExpect() {
+      // given
+      mockCollaborator.expect().call(mockCollaborator.methodOne())
+      mockCollaborator.reject().call(mockCollaborator.methodTwo())
+      mockCollaborator.expect().call(mockCollaborator.methodThree())
+
+      //when
+      sut.ExpectRejectExpect()
+
+      //then
+      mockCollaborator.verify()
+    }
+
+    func testExpectExpectReject() {
+      // given
+      mockCollaborator.expect().call(mockCollaborator.methodOne())
+      mockCollaborator.expect().call(mockCollaborator.methodTwo())
+      mockCollaborator.reject().call(mockCollaborator.methodThree())
+
+      //when
+      sut.ExpectExpectReject()
+
+      //then
+      mockCollaborator.verify()
+    }
+
+    func testRejectRejectExpect() {
+      // given
+      mockCollaborator.reject().call(mockCollaborator.methodOne())
+      mockCollaborator.reject().call(mockCollaborator.methodTwo())
+      mockCollaborator.expect().call(mockCollaborator.methodThree())
+
+      //when
+      sut.RejectRejectExpect()
+
+      //then
+      mockCollaborator.verify()
+    }
+
+    func testExpectExpectExpect() {
+      // given
+      mockCollaborator.expect().call(mockCollaborator.methodOne())
+      mockCollaborator.expect().call(mockCollaborator.methodTwo())
+      mockCollaborator.expect().call(mockCollaborator.methodThree())
+
+      //when
+      sut.ExpectExpectExpect()
+
+      //then
+      mockCollaborator.verify()
+    }
+
+    func testRejectRejectReject() {
+      // given
+      mockCollaborator.reject().call(mockCollaborator.methodOne())
+      mockCollaborator.reject().call(mockCollaborator.methodTwo())
+      mockCollaborator.reject().call(mockCollaborator.methodThree())
+
+      //when
+      sut.RejectRejectReject()
+
+      //then
+      mockCollaborator.verify()
+    }
+
+    func testRejectExpectExpect() {
+      // given
+      mockCollaborator.reject().call(mockCollaborator.methodOne())
+      mockCollaborator.expect().call(mockCollaborator.methodTwo())
+      mockCollaborator.expect().call(mockCollaborator.methodThree())
+
+      //when
+      sut.RejectExpectExpect()
+
+      //then
+      mockCollaborator.verify()
+    }
+
+    func testRejectExpectReject() {
+      // given
+      mockCollaborator.reject().call(mockCollaborator.methodOne())
+      mockCollaborator.expect().call(mockCollaborator.methodTwo())
+      mockCollaborator.reject().call(mockCollaborator.methodThree())
+
+      //when
+      sut.RejectExpectReject()
+
+      //then
+      mockCollaborator.verify()
+    }
+
+    func testExpectRejectReject() {
+      // given
+      mockCollaborator.expect().call(mockCollaborator.methodOne())
+      mockCollaborator.reject().call(mockCollaborator.methodTwo())
+      mockCollaborator.reject().call(mockCollaborator.methodThree())
+
+      //when
+      sut.ExpectRejectReject()
+
+      //then
+      mockCollaborator.verify()
     }
 }

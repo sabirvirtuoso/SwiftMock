@@ -29,5 +29,42 @@ class Example {
     func doSomethingWithDictParameters(dict: Dictionary<String, String>) -> String {
         return collaborator.stringDictFunction(dict)
     }
+
+    func ExpectRejectExpect() {
+      collaborator.methodOne()
+      collaborator.methodThree()
+    }
+
+    func ExpectExpectReject() {
+      collaborator.methodOne()
+      collaborator.methodTwo()
+    }
+
+    func RejectRejectExpect() {
+      collaborator.methodThree()
+    }
+
+    func ExpectExpectExpect() {
+      collaborator.methodOne()
+      collaborator.methodTwo()
+      collaborator.methodThree()
+    }
+
+    func RejectRejectReject() {
+      // call nothing
+    }
+
+    func RejectExpectExpect() {
+      collaborator.methodTwo()
+      collaborator.methodThree()
+    }
+
+    func RejectExpectReject() {
+      collaborator.methodTwo()
+    }
+
+    func ExpectRejectReject() {
+      collaborator.methodOne()
+    }
 }
 

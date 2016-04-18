@@ -21,4 +21,16 @@ class ExampleCollaborator {
     func stringDictFunction(dict : [String: String]) -> String{
         return ""
     }
+
+    func methodOne() {
+      print("Method One invoked")
+    }
+
+    func methodTwo() {
+      print("Method Two invoked")
+    }
+
+    func methodThree() {
+      print("Method Three invoked")
+    }
 }
