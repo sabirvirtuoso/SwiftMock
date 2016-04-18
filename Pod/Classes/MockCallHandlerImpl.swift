@@ -113,6 +113,10 @@ public class MockCallHandlerImpl: MockCallHandler {
             var matchedExpectationIndex: Int?
 
             for index in (0..<expectations.count) {
+                    if isRejection(expectations[index]) {
+                      continue
+                    }
+
                     if expectations[index].satisfy(functionName:functionName, args: args) {
                       matchedExpectationIndex = index
 
