@@ -1,5 +1,5 @@
 PODS:
-  - SwiftMock (0.1.0)
+  - SwiftMock (0.0.3)
 
 DEPENDENCIES:
   - SwiftMock (from `../`)
@@ -9,6 +9,8 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  SwiftMock: e7dad9b6497278fbb1c85c46a46b372a7ee3a409
+  SwiftMock: 3cd023755bbd81c4e2bb9acecacc5ec002702e92
 
-COCOAPODS: 0.38.2
+PODFILE CHECKSUM: c705af047b8ce673a52266479815c1cb2751d1b4
+
+COCOAPODS: 1.0.0.rc.1

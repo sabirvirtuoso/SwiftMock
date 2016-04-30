@@ -1,11 +1,11 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-target 'SwiftMock_Example', :exclusive => true do
+target 'SwiftMock_Example' do
   pod "SwiftMock", :path => "../"
 end
 
-target 'SwiftMock_Tests', :exclusive => true do
+target 'SwiftMock_Tests' do
   pod "SwiftMock", :path => "../"
 
 #  pod 'Quick', '~> 0.3.1'

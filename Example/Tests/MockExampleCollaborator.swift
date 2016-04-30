@@ -9,6 +9,7 @@
 import Foundation
 import XCTest
 import SwiftMock
+
 @testable import SwiftMock_Example
 
 /// the mock ExampleCollaborator
