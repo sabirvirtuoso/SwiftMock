@@ -88,7 +88,7 @@ public class MockCallHandlerImpl: MockCallHandler {
                 continue
               }
 
-              if (expectation as! MockRejection).rejectCalled {
+              if (expectation as! MockRejection).isCalled() {
                 failer.doFail("Unexpected call to '\(functionName)' received", file: file, line: line)
               }
             }
@@ -111,22 +111,36 @@ public class MockCallHandlerImpl: MockCallHandler {
         if !expectationRegistered {
             // OK, this wasn't a call to set up function expectations, so it's a real call
             var matchedExpectationIndex: Int?
+            var argumentMatched = true
 
             for index in (0..<expectations.count) {
-                    if isRejection(expectations[index]) {
-                      continue
+                    let expectation = expectations[index]
+
+                    guard expectation.satisfy(functionName: functionName) else {
+                        continue
                     }
 
-                    if expectations[index].satisfy(functionName:functionName, args: args) {
-                      matchedExpectationIndex = index
+                    guard !isRejection(expectation) else {
+                        (expectation as! MockRejection).called(true)
+                        matchedExpectationIndex = index
 
-                      break
+                        break
+                    }
+
+                    if expectations[index].satisfy(args: args) {
+                        matchedExpectationIndex = index
+
+                        break
+                    } else {
+                        argumentMatched = false
                     }
             }
 
             if let index = matchedExpectationIndex {
                 // it was expected
                 returnValue = expectationMatched(index)
+            } else if !argumentMatched {
+                failer.doFail("Argument matcher requirement of '\(functionName)' is not satisfied", file: "", line: 0)
             } else {
                 // whoopsie, unexpected
                 failer.doFail("Unexpected call to '\(functionName)' received", file: "", line: 0)

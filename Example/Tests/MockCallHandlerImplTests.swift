@@ -88,6 +88,51 @@ class MockCallHandlerImplTests: XCTestCase {
         XCTAssertEqual(failer.line, 1234)
     }
 
+    func testRejectCall_callNotMade_verify() {
+        // given
+        XCTAssertNil(failer.message)
+        XCTAssertNil(failer.file)
+        XCTAssertNil(failer.line)
+
+        //when
+        sut.reject("ignored", 1).call(42)
+        let expectationReturnValue = sut.accept(42, functionName: "selector", args: "arg1", "arg2", 3)
+
+        //then
+        XCTAssertEqual(42, expectationReturnValue as? Int)
+
+        //when
+        sut.verify("thefile", 1234)
+
+        // then
+        XCTAssertNil(failer.message)
+        XCTAssertNil(failer.file)
+        XCTAssertNil(failer.line)
+    }
+
+    func testRejectCall_callMade_verify() {
+        // given
+        XCTAssertNil(failer.message)
+        XCTAssertNil(failer.file)
+        XCTAssertNil(failer.line)
+
+        //when
+        sut.reject("ignored", 1).call(42)
+        let expectationReturnValue = sut.accept(42, functionName: "selector", args: "arg1", "arg2", 3)
+        sut.accept(42, functionName: "selector", args: "arg1", "arg2", 3)
+
+        //then
+        XCTAssertEqual(42, expectationReturnValue as? Int)
+
+        //when
+        sut.verify("thefile", 1234)
+
+        // then
+        XCTAssertEqual(failer.message, "Unexpected call to 'selector' received")
+        XCTAssertEqual(failer.file, "thefile")
+        XCTAssertEqual(failer.line, 1234)
+    }
+
     func testDoNotExpectCall_callMade_failFast() {
         // given
         XCTAssertNil(failer.message)
@@ -196,7 +241,7 @@ class MockCallHandlerImplTests: XCTestCase {
         sut.accept(42, functionName: "selector", args: "arg1", "banana", 3)
         
         // then
-        XCTAssertEqual(failer.message, "Unexpected call to 'selector' received")
+        XCTAssertEqual(failer.message, "Argument matcher requirement of 'selector' is not satisfied")
         XCTAssertEqual(failer.file, "")
         XCTAssertEqual(failer.line, 0)
     }

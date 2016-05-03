@@ -63,7 +63,7 @@ class MockMatcherTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: [arg])
-        let match = sut.satisfy(functionName: "func", args: [arg])
+        let match = sut.satisfy(functionName: "func") && sut.satisfy(args: [arg])
         
         // then
         XCTAssertTrue(match, "\(arg)")
@@ -75,7 +75,7 @@ class MockMatcherTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: [arg])
-        let match = sut.satisfy(functionName: "func", args: [arg])
+        let match = sut.satisfy(functionName: "func") && sut.satisfy(args: [arg])
         
         // then
         XCTAssertTrue(match, "\(arg)")
@@ -88,7 +88,7 @@ class MockMatcherTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func1", args: [classWillMatch])
-        let match1 = sut.satisfy(functionName: "func1", args: [classWillMatch])
+        let match1 = sut.satisfy(functionName: "func1") && sut.satisfy(args: [classWillMatch])
         
         // then
         XCTAssertTrue(match1)
@@ -101,7 +101,7 @@ class MockMatcherTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func2", args: [classWillNotMatch])
-        let match2 = sut.satisfy(functionName: "func2", args: [classWillNotMatch])
+        let match2 = sut.satisfy(functionName: "func2") && sut.satisfy(args: [classWillNotMatch])
         
         // then
         XCTAssertFalse(match2)

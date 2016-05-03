@@ -56,8 +56,12 @@ public class MockExpectation {
         return functionName != nil
     }
     
+    public func satisfy(functionName theFunctionName: String) -> Bool {
+        return functionName == theFunctionName
+    }
+
     /// offer this function, and its arguments, to the expectation to see if it matches
-    public func satisfy(functionName theFunctionName: String, args theArgs: [Any?]?) -> Bool {
+    public func satisfy(args theArgs: [Any?]?) -> Bool {
         let matcher = MockMatcher()
         var expectedArgsToMatch = [Any?]()
         var actualArgsToMatch = [Any?]()
@@ -65,7 +69,7 @@ public class MockExpectation {
         actualArgs = theArgs ?? []
 
         guard !argumentMatcherRequirement.isEmpty else {
-          return functionName == theFunctionName && matcher.match(expectedArgs, actualArgs)
+          return matcher.match(expectedArgs, actualArgs)
         }
 
         for (index, matchArg) in argumentMatcherRequirement.enumerate() {
@@ -75,7 +79,7 @@ public class MockExpectation {
           }
         }
 
-        return functionName == theFunctionName && matcher.match(expectedArgsToMatch, actualArgsToMatch)
+        return matcher.match(expectedArgsToMatch, actualArgsToMatch)
     }
     
     /// perform actions, and return a value from the mock
@@ -89,7 +93,7 @@ public class MockRejection: MockExpectation {
   let failer: MockFailer
   let file: String
   let line: UInt
-  var rejectCalled = false
+  private var rejectCalled = false
 
   public init(failer: MockFailer, file: String, _ line: UInt) {
     self.failer = failer
@@ -97,10 +101,12 @@ public class MockRejection: MockExpectation {
     self.line = line
   }
 
-  override public func satisfy(functionName theFunctionName: String, args theArgs: [Any?]?) -> Bool {
-    rejectCalled = true
+  public func called(rejectCalled: Bool) {
+    self.rejectCalled = rejectCalled
+  }
     
-    return true
+  public func isCalled() -> Bool {
+    return rejectCalled
   }
   
   private override func assertArgumentCountMatch() {

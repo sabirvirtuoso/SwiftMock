@@ -17,7 +17,7 @@ class MockExpectationTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: ["arg1", 2, nil, true])
-        let match = sut.satisfy(functionName: "func", args: ["arg1", 2, nil, true])
+        let match = sut.satisfy(functionName: "func") && sut.satisfy(args: ["arg1", 2, nil, true])
         
         // then
         XCTAssertTrue(match)
@@ -29,7 +29,7 @@ class MockExpectationTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: ["arg1", 2, true])
-        let match = sut.satisfy(functionName: "banana", args: ["arg1", 2, true])
+        let match = sut.satisfy(functionName: "banana") && sut.satisfy(args: ["arg1", 2, true])
         
         // then
         XCTAssertFalse(match)
@@ -41,7 +41,7 @@ class MockExpectationTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: ["arg1", 2, true])
-        let match = sut.satisfy(functionName: "func", args: ["arg1", 2])
+        let match = sut.satisfy(functionName: "func") && sut.satisfy(args: ["arg1", 2])
         
         // then
         XCTAssertFalse(match)
@@ -53,7 +53,7 @@ class MockExpectationTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: ["arg1", nil, true])
-        let match = sut.satisfy(functionName: "func", args: ["arg1", 3, true])
+        let match = sut.satisfy(functionName: "func") && sut.satisfy(args: ["arg1", 3, true])
         
         // then
         XCTAssertFalse(match)
@@ -65,7 +65,7 @@ class MockExpectationTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: ["arg1", 3, true])
-        let match = sut.satisfy(functionName: "func", args: ["arg1", nil, true])
+        let match = sut.satisfy(functionName: "func") && sut.satisfy(args: ["arg1", nil, true])
         
         // then
         XCTAssertFalse(match)
@@ -77,7 +77,7 @@ class MockExpectationTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: ["arg1", 2, true])
-        let match = sut.satisfy(functionName: "func", args: ["arg1", "bob", true])
+        let match = sut.satisfy(functionName: "func") && sut.satisfy(args: ["arg1", "bob", true])
         
         // then
         XCTAssertFalse(match)
@@ -89,7 +89,7 @@ class MockExpectationTests: XCTestCase {
         
         // when
         sut.acceptExpected(functionName: "func", args: ["arg1", 2, true])
-        let match = sut.satisfy(functionName: "func", args: ["arg1", 3, true])
+        let match = sut.satisfy(functionName: "func") && sut.satisfy(args: ["arg1", 3, true])
         
         // then
         XCTAssertFalse(match)
@@ -114,7 +114,7 @@ class MockExpectationTests: XCTestCase {
         sut.acceptExpected(functionName: "func", args: nil)
         let actionable1 = sut.call(13)
         let actionable2 = actionable1.andReturn(42)
-        let satisfied = sut.satisfy(functionName: "func", args: nil)
+        let satisfied = sut.satisfy(functionName: "func") && sut.satisfy(args: nil)
         let returnedValue = sut.performActions() as! Int
         
         // then
